@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Station from "./components/Station";
+import StationList from "./components/StationList";
+import Trips from "./components/Trips";
 
-function App() {
+const App = () => {
+  const padding = {
+    padding: 5,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <div>
+          <h1>Bikeapp 2023</h1>
+          <div>
+            <Link style={padding} to="/">
+              home
+            </Link>
+            <Link style={padding} to="/trips">
+              notes
+            </Link>
+            <Link style={padding} to="/station">
+              users
+            </Link>
+          </div>
+        </div>
+
+        <Routes>
+          <Route path="/" element={<StationList />} />
+          <Route path="/trips" element={<Trips />} />
+          <Route path="/station" element={<Station />} />
+        </Routes>
+
+        <div>
+          <i>Bikeapp, Aleksi Rendel - 2023</i>
+        </div>
+      </Router>
     </div>
   );
-}
+};
 
 export default App;
