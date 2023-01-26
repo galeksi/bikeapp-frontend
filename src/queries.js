@@ -36,3 +36,25 @@ export const ALL_TRIPS = gql`
     }
   }
 `;
+
+export const LATEST_TRIPS = gql`
+  query latestTrips($limit: Int) {
+    latestTrips(limit: $limit) {
+      departure
+      departureStation {
+        id
+        nimi
+        number
+      }
+      distance
+      duration
+      id
+      return
+      returnStation {
+        id
+        nimi
+        number
+      }
+    }
+  }
+`;

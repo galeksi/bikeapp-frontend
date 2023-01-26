@@ -1,23 +1,71 @@
-import { useQuery } from "@apollo/client";
-import { ALL_TRIPS } from "../queries";
+import { useState, useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { LATEST_TRIPS } from "../queries";
+import ReactPaginate from "react-paginate";
+import "./pagination.css";
 
 const Trips = () => {
-  const trips = useQuery(ALL_TRIPS, {
-    variables: {
-      offset: 0,
-      limit: 20,
+  // const trips = useQuery(LATEST_TRIPS, {
+  //   variables: {
+  //     limit: 20,
+  //   },
+  // });
+
+  // if (trips.loading) {
+  //   return <div>loading...</div>;
+  // }
+
+  const [trips, setTrips] = useState([]);
+  const [itemOffset, setItemOffset] = useState(0);
+  // const [itemsPerPage, setItemsPerPage] = useState(20);
+
+  const [fetchTrips, { loading }] = useLazyQuery(LATEST_TRIPS, {
+    onCompleted: (data) => {
+      setTrips(data.latestTrips);
     },
   });
 
-  if (trips.loading) {
-    return <div>loading...</div>;
-  }
+  useEffect(() => {
+    fetchTrips({
+      variables: {
+        limit: 100,
+      },
+    });
+  }, [fetchTrips]);
 
-  console.log(trips.data.allTrips);
+  if (loading) return <h2>Loading ...</h2>;
+
+  const itemsPerPage = 20;
+  const endOffset = itemOffset + itemsPerPage;
+  const tripsToView = trips.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(trips.length / itemsPerPage);
+
+  const handlePageClick = ({ selected }) => {
+    const newOffset = (selected * itemsPerPage) % trips.length;
+    setItemOffset(newOffset);
+  };
+
+  // console.log(tripsToView);
 
   return (
     <div>
       <h2>Trips</h2>
+      <ReactPaginate
+        activeClassName={"item active "}
+        breakClassName={"item break-me "}
+        breakLabel={"..."}
+        containerClassName={"pagination"}
+        disabledClassName={"disabled-page"}
+        marginPagesDisplayed={2}
+        nextClassName={"item next "}
+        nextLabel={"forward >"}
+        onPageChange={handlePageClick}
+        pageCount={pageCount}
+        pageClassName={"item pagination-page "}
+        pageRangeDisplayed={2}
+        previousClassName={"item previous"}
+        previousLabel={"< back"}
+      />
       <table>
         <tbody>
           <tr>
@@ -30,7 +78,7 @@ const Trips = () => {
             <th>Duration</th>
             <th>Distance</th>
           </tr>
-          {trips.data.allTrips.map((t) => (
+          {tripsToView.map((t) => (
             <tr key={t.id}>
               <td>{t.departureStation.nimi}</td>
               <td>{t.departureStation.number}</td>

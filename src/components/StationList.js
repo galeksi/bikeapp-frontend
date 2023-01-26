@@ -7,13 +7,9 @@ import "./pagination.css";
 const StationList = () => {
   const [stations, setStations] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  // const [itemsPerPage, setItemsPerPage] = useState(20);
 
-  const [fetchStations] = useLazyQuery(ALL_STATIONS, {
-    // variables: {
-    //   offset: 0,
-    //   limit: 20,
-    // },
+  const [fetchStations, { loading }] = useLazyQuery(ALL_STATIONS, {
     onCompleted: (data) => {
       setStations(data.allStations);
     },
@@ -28,6 +24,9 @@ const StationList = () => {
     });
   }, [fetchStations]);
 
+  if (loading) return <h2>Loading ...</h2>;
+
+  const itemsPerPage = 20;
   const endOffset = itemOffset + itemsPerPage;
   const stationsToView = stations.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(stations.length / itemsPerPage);
@@ -37,11 +36,27 @@ const StationList = () => {
     setItemOffset(newOffset);
   };
 
-  console.log(stationsToView);
+  // console.log(stationsToView);
 
   return (
     <div>
       <h2>StationList</h2>
+      <ReactPaginate
+        activeClassName={"item active "}
+        breakClassName={"item break-me "}
+        breakLabel={"..."}
+        containerClassName={"pagination"}
+        disabledClassName={"disabled-page"}
+        marginPagesDisplayed={2}
+        nextClassName={"item next "}
+        nextLabel={"forward >"}
+        onPageChange={handlePageClick}
+        pageCount={pageCount}
+        pageClassName={"item pagination-page "}
+        pageRangeDisplayed={2}
+        previousClassName={"item previous"}
+        previousLabel={"< back"}
+      />
       <table>
         <tbody>
           <tr>
@@ -63,22 +78,6 @@ const StationList = () => {
             ))}
         </tbody>
       </table>
-      <ReactPaginate
-        activeClassName={"item active "}
-        breakClassName={"item break-me "}
-        breakLabel={"..."}
-        containerClassName={"pagination"}
-        disabledClassName={"disabled-page"}
-        marginPagesDisplayed={2}
-        nextClassName={"item next "}
-        nextLabel={"forward >"}
-        onPageChange={handlePageClick}
-        pageCount={pageCount}
-        pageClassName={"item pagination-page "}
-        pageRangeDisplayed={2}
-        previousClassName={"item previous"}
-        previousLabel={"< back"}
-      />
     </div>
   );
 };
