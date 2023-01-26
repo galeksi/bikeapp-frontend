@@ -8,34 +8,41 @@ const App = () => {
     padding: 5,
   };
 
+  const container = {
+    width: "800px",
+    margin: "auto",
+  };
+
   return (
-    <div>
-      <Router>
-        <div>
-          <h1>Bikeapp 2023</h1>
+    <div style={container}>
+      <div>
+        <Router>
           <div>
-            <Link style={padding} to="/">
-              home
-            </Link>
-            <Link style={padding} to="/trips">
-              notes
-            </Link>
-            <Link style={padding} to="/station">
-              users
-            </Link>
+            <h1>Bikeapp 2023</h1>
+            <div>
+              <Link style={padding} to="/">
+                stations
+              </Link>
+              <Link style={padding} to="/trips">
+                trips
+              </Link>
+              <Link style={padding} to="/station">
+                station
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <Routes>
-          <Route path="/" element={<StationList />} />
-          <Route path="/trips" element={<Trips />} />
-          <Route path="/station" element={<Station />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<StationList />} />
+            <Route path="/trips" element={<Trips />} />
+            <Route path="/station" element={<Station />} />
+          </Routes>
 
-        <div>
-          <i>Bikeapp, Aleksi Rendel - 2023</i>
-        </div>
-      </Router>
+          <div>
+            <i>Bikeapp, Aleksi Rendel - 2023</i>
+          </div>
+        </Router>
+      </div>
     </div>
   );
 };
