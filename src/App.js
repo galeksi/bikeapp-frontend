@@ -26,16 +26,13 @@ const App = () => {
               <Link style={padding} to="/trips">
                 trips
               </Link>
-              <Link style={padding} to="/station">
-                station
-              </Link>
             </div>
           </div>
 
           <Routes>
             <Route path="/" element={<StationList />} />
             <Route path="/trips" element={<Trips />} />
-            <Route path="/station" element={<Station />} />
+            <Route path="/station/:id" element={<Station />} />
           </Routes>
 
           <div>

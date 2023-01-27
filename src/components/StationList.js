@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { ALL_STATIONS } from "../queries";
@@ -70,7 +71,9 @@ const StationList = () => {
             stationsToView.map((s) => (
               <tr key={s.id}>
                 <td>{s.number}</td>
-                <td>{s.nimi}</td>
+                <td>
+                  <Link to={`/station/${s.id}`}>{s.nimi}</Link>
+                </td>
                 <td>{s.osoite}</td>
                 <td>{s.kaupunki}</td>
                 <td>{s.capacity}</td>
