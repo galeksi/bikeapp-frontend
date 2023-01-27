@@ -31,7 +31,7 @@ export const SINGLE_STATION = gql`
 `;
 
 export const STATION_STATS = gql`
-  query stationStats($id: String) {
+  query stationWithStats($id: String) {
     stationStats(id: $id) {
       stationId
       startTotal
