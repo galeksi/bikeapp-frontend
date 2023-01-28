@@ -1,9 +1,26 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { ALL_STATIONS } from "./queries";
 import Station from "./components/Station";
 import StationList from "./components/StationList";
 import Trips from "./components/Trips";
 
 const App = () => {
+  const [stations, setStations] = useState([]);
+
+  const [fetchStations, { loading }] = useLazyQuery(ALL_STATIONS, {
+    onCompleted: (data) => {
+      setStations(data.allStations);
+    },
+  });
+
+  useEffect(() => {
+    fetchStations();
+  }, [fetchStations]);
+
+  if (loading) return <h2>Loading ...</h2>;
+
   const padding = {
     padding: 5,
   };
@@ -30,9 +47,12 @@ const App = () => {
           </div>
 
           <Routes>
-            <Route path="/" element={<StationList />} />
+            <Route path="/" element={<StationList stations={stations} />} />
             <Route path="/trips" element={<Trips />} />
-            <Route path="/station/:id" element={<Station />} />
+            <Route
+              path="/station/:id"
+              element={<Station stations={stations} />}
+            />
           </Routes>
 
           <div>

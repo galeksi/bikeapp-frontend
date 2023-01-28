@@ -2,8 +2,10 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { STATION_STATS } from "../queries";
 
-const Station = () => {
+const Station = (params) => {
   const id = useParams().id;
+  const stations = params.stations;
+
   const stationData = useQuery(STATION_STATS, {
     variables: {
       id: id,
@@ -16,6 +18,13 @@ const Station = () => {
 
   const station = stationData.data.singleStation;
   const stats = stationData.data.stationStats;
+
+  const returnStations = stats.popularReturn.map((ret) =>
+    stations.find((station) => station.id === ret)
+  );
+  const departureStations = stats.popularDeparture.map((dep) =>
+    stations.find((station) => station.id === dep)
+  );
 
   return (
     <div>
@@ -48,16 +57,20 @@ const Station = () => {
           <b>Most popular return station from here:</b>
         </p>
         <ol>
-          {stats.popularReturn.map((s) => (
-            <li>{s}</li>
+          {returnStations.map((s) => (
+            <li key={s.id}>
+              {s.nimi}&nbsp;(Nr.{s.number})&nbsp;-&nbsp;{s.osoite}
+            </li>
           ))}
         </ol>
         <p>
           <b>Most popular departure station to here:</b>
         </p>
         <ol>
-          {stats.popularDeparture.map((s) => (
-            <li>{s}</li>
+          {departureStations.map((s) => (
+            <li key={s.id}>
+              {s.nimi}&nbsp;(Nr.{s.number})&nbsp;-&nbsp;{s.osoite}
+            </li>
           ))}
         </ol>
       </div>

@@ -1,32 +1,17 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useLazyQuery } from "@apollo/client";
-import { ALL_STATIONS } from "../queries";
+import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import "./pagination.css";
 
-const StationList = () => {
-  const [stations, setStations] = useState([]);
+var _ = require("lodash");
+
+const StationList = (params) => {
   const [itemOffset, setItemOffset] = useState(0);
-  // const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [searchedStations, setSearch] = useState("");
 
-  const [fetchStations, { loading }] = useLazyQuery(ALL_STATIONS, {
-    onCompleted: (data) => {
-      setStations(data.allStations);
-    },
-  });
+  useEffect(() => {});
 
-  useEffect(() => {
-    fetchStations({
-      // variables: {
-      //   offset: 0,
-      //   limit: 20,
-      // },
-    });
-  }, [fetchStations]);
-
-  if (loading) return <h2>Loading ...</h2>;
-
+  const stations = searchedStations === "" ? params.stations : searchedStations;
   const itemsPerPage = 20;
   const endOffset = itemOffset + itemsPerPage;
   const stationsToView = stations.slice(itemOffset, endOffset);
@@ -37,11 +22,31 @@ const StationList = () => {
     setItemOffset(newOffset);
   };
 
-  // console.log(stationsToView);
+  const searchStations = (event) => {
+    event.preventDefault();
+    const content = event.target.search.value;
+    event.target.search.value = "";
+    const filteredStations = _.filter(params.stations, (s) =>
+      _.includes(s, content)
+    );
+    setItemOffset(0);
+    setSearch(filteredStations);
+  };
+
+  const clearSearch = () => {
+    setSearch("");
+  };
 
   return (
     <div>
       <h2>StationList</h2>
+      <div>
+        <form onSubmit={searchStations}>
+          <input name="search" />
+          <button type="submit">Search</button>
+          <button onClick={clearSearch}>Clear search</button>
+        </form>
+      </div>
       <ReactPaginate
         activeClassName={"item active "}
         breakClassName={"item break-me "}
