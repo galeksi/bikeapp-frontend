@@ -6,7 +6,7 @@ import "./pagination.css";
 var _ = require("lodash");
 
 const StationList = (params) => {
-  const [itemOffset, setItemOffset] = useState(0);
+  const [itemOffset, setItemOffset] = useState(20);
   const [searchedStations, setSearch] = useState("");
 
   useEffect(() => {});
@@ -26,9 +26,13 @@ const StationList = (params) => {
     event.preventDefault();
     const content = event.target.search.value;
     event.target.search.value = "";
-    const filteredStations = _.filter(params.stations, (s) =>
-      _.includes(s, content)
+    // const filteredStations = _.filter(params.stations, (s) =>
+    //   _.includes(s, content)
+    // );
+    const filteredStations = params.stations.filter((obj) =>
+      JSON.stringify(obj).toLowerCase().includes(content.toLowerCase())
     );
+    console.log(filteredStations);
     setItemOffset(0);
     setSearch(filteredStations);
   };
