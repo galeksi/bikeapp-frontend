@@ -1,71 +1,66 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import ReactPaginate from "react-paginate";
-import "./pagination.css";
-
-var _ = require("lodash");
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import ReactPaginate from 'react-paginate'
+import './pagination.css'
 
 const StationList = (params) => {
-  const [itemOffset, setItemOffset] = useState(20);
-  const [searchedStations, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(0)
+  const [searchedStations, setSearchedStations] = useState('')
+  const [search, setSearch] = useState('')
 
-  useEffect(() => {});
+  const stations = searchedStations === '' ? params.stations : searchedStations
+  const itemsPerPage = 20
+  const itemOffset = currentPage * itemsPerPage
+  const endOffset = itemOffset + itemsPerPage
+  const stationsToView = stations.slice(itemOffset, endOffset)
+  const pageCount = Math.ceil(stations.length / itemsPerPage)
 
-  const stations = searchedStations === "" ? params.stations : searchedStations;
-  const itemsPerPage = 20;
-  const endOffset = itemOffset + itemsPerPage;
-  const stationsToView = stations.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(stations.length / itemsPerPage);
+  const handelSearchChange = (event) => setSearch(event.target.value)
 
   const handlePageClick = ({ selected }) => {
-    const newOffset = (selected * itemsPerPage) % stations.length;
-    setItemOffset(newOffset);
-  };
+    setCurrentPage(selected)
+  }
 
   const searchStations = (event) => {
-    event.preventDefault();
-    const content = event.target.search.value;
-    event.target.search.value = "";
-    // const filteredStations = _.filter(params.stations, (s) =>
-    //   _.includes(s, content)
-    // );
+    event.preventDefault()
     const filteredStations = params.stations.filter((obj) =>
-      JSON.stringify(obj).toLowerCase().includes(content.toLowerCase())
-    );
-    console.log(filteredStations);
-    setItemOffset(0);
-    setSearch(filteredStations);
-  };
+      JSON.stringify(obj).toLowerCase().includes(search.toLowerCase())
+    )
+    setSearchedStations(filteredStations)
+    setCurrentPage(0)
+  }
 
   const clearSearch = () => {
-    setSearch("");
-  };
+    setSearchedStations('')
+    setSearch('')
+  }
 
   return (
     <div>
       <h2>StationList</h2>
       <div>
         <form onSubmit={searchStations}>
-          <input name="search" />
+          <input value={search} onChange={handelSearchChange} />
           <button type="submit">Search</button>
           <button onClick={clearSearch}>Clear search</button>
         </form>
       </div>
       <ReactPaginate
-        activeClassName={"item active "}
-        breakClassName={"item break-me "}
-        breakLabel={"..."}
-        containerClassName={"pagination"}
-        disabledClassName={"disabled-page"}
+        activeClassName={'item active '}
+        breakClassName={'item break-me '}
+        breakLabel={'...'}
+        containerClassName={'pagination'}
+        disabledClassName={'disabled-page'}
         marginPagesDisplayed={2}
-        nextClassName={"item next "}
-        nextLabel={"forward >"}
+        nextClassName={'item next '}
+        nextLabel={'forward >'}
         onPageChange={handlePageClick}
+        forcePage={currentPage}
         pageCount={pageCount}
-        pageClassName={"item pagination-page "}
+        pageClassName={'item pagination-page '}
         pageRangeDisplayed={2}
-        previousClassName={"item previous"}
-        previousLabel={"< back"}
+        previousClassName={'item previous'}
+        previousLabel={'< back'}
       />
       <table>
         <tbody>
@@ -91,7 +86,7 @@ const StationList = (params) => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default StationList;
+export default StationList
