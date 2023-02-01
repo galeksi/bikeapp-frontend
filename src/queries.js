@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const ALL_STATIONS = gql`
   query allStations($offset: Int, $limit: Int) {
@@ -13,7 +13,7 @@ export const ALL_STATIONS = gql`
       osoite
     }
   }
-`;
+`
 
 export const SINGLE_STATION = gql`
   query singleStation($id: String) {
@@ -28,7 +28,7 @@ export const SINGLE_STATION = gql`
       osoite
     }
   }
-`;
+`
 
 export const STATION_STATS = gql`
   query stationWithStats($id: String) {
@@ -52,11 +52,21 @@ export const STATION_STATS = gql`
       osoite
     }
   }
-`;
+`
 
 export const ALL_TRIPS = gql`
-  query allTrips($offset: Int, $limit: Int) {
-    allTrips(offset: $offset, limit: $limit) {
+  query allTrips(
+    $limit: Int
+    $departure: String
+    $return: String
+    $date: String
+  ) {
+    allTrips(
+      limit: $limit
+      departure: $departure
+      return: $return
+      date: $date
+    ) {
       departure
       departureStation {
         id
@@ -74,7 +84,7 @@ export const ALL_TRIPS = gql`
       }
     }
   }
-`;
+`
 
 export const LATEST_TRIPS = gql`
   query latestTrips($limit: Int) {
@@ -96,4 +106,4 @@ export const LATEST_TRIPS = gql`
       }
     }
   }
-`;
+`

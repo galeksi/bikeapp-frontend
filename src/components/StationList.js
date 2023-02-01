@@ -1,12 +1,28 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api'
 import ReactPaginate from 'react-paginate'
+
+import './StationList.css'
 import './pagination.css'
 
 const StationList = (params) => {
   const [currentPage, setCurrentPage] = useState(0)
   const [searchedStations, setSearchedStations] = useState('')
   const [search, setSearch] = useState('')
+
+  console.log(process.env.REACT_APP_TEST)
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyCQ8XgBzFz7ZCkP3a4plEjTOuXtZHkKLpw',
+  })
+  const center = useMemo(
+    () => ({
+      lat: 60.16861358586236,
+      lng: 24.966495679482307,
+    }),
+    []
+  )
 
   const stations = searchedStations === '' ? params.stations : searchedStations
   const itemsPerPage = 20
@@ -15,7 +31,7 @@ const StationList = (params) => {
   const stationsToView = stations.slice(itemOffset, endOffset)
   const pageCount = Math.ceil(stations.length / itemsPerPage)
 
-  const handelSearchChange = (event) => setSearch(event.target.value)
+  const handleSearchChange = (event) => setSearch(event.target.value)
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected)
@@ -26,6 +42,7 @@ const StationList = (params) => {
     const filteredStations = params.stations.filter((obj) =>
       JSON.stringify(obj).toLowerCase().includes(search.toLowerCase())
     )
+    console.log('searched')
     setSearchedStations(filteredStations)
     setCurrentPage(0)
   }
@@ -36,14 +53,25 @@ const StationList = (params) => {
   }
 
   return (
-    <div>
+    <div className="StationList">
       <h2>StationList</h2>
+      <div className="App">
+        {!isLoaded ? (
+          <h1>Loading...</h1>
+        ) : (
+          <GoogleMap
+            mapContainerClassName="map-container"
+            center={center}
+            zoom={10}
+          />
+        )}
+      </div>
       <div>
         <form onSubmit={searchStations}>
-          <input value={search} onChange={handelSearchChange} />
+          <input value={search} onChange={handleSearchChange} />
           <button type="submit">Search</button>
-          <button onClick={clearSearch}>Clear search</button>
         </form>
+        <button onClick={clearSearch}>Clear search</button>
       </div>
       <ReactPaginate
         activeClassName={'item active '}
