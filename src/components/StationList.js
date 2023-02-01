@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom'
-import { useState, useMemo } from 'react'
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api'
+import { useState } from 'react'
+import {
+  GoogleMap,
+  Marker,
+  useLoadScript,
+  InfoWindow,
+} from '@react-google-maps/api'
 import ReactPaginate from 'react-paginate'
 
 import './StationList.css'
@@ -10,19 +15,13 @@ const StationList = (params) => {
   const [currentPage, setCurrentPage] = useState(0)
   const [searchedStations, setSearchedStations] = useState('')
   const [search, setSearch] = useState('')
-
-  console.log(process.env.REACT_APP_TEST)
+  const [mapRef, setMapRef] = useState()
+  const [isOpen, setIsOpen] = useState(false)
+  const [infoWindowData, setInfoWindowData] = useState()
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyCQ8XgBzFz7ZCkP3a4plEjTOuXtZHkKLpw',
+    googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
   })
-  const center = useMemo(
-    () => ({
-      lat: 60.16861358586236,
-      lng: 24.966495679482307,
-    }),
-    []
-  )
 
   const stations = searchedStations === '' ? params.stations : searchedStations
   const itemsPerPage = 20
@@ -30,6 +29,28 @@ const StationList = (params) => {
   const endOffset = itemOffset + itemsPerPage
   const stationsToView = stations.slice(itemOffset, endOffset)
   const pageCount = Math.ceil(stations.length / itemsPerPage)
+
+  const markers = stations.map((s) => ({
+    name: s.nimi,
+    number: s.number,
+    address: s.osoite,
+    capacity: s.capacity,
+    lat: Number(s.lat),
+    lng: Number(s.long),
+  }))
+
+  const onMapLoad = (map) => {
+    setMapRef(map)
+    const bounds = new window.google.maps.LatLngBounds()
+    markers?.forEach(({ lat, lng }) => bounds.extend({ lat, lng }))
+    map.fitBounds(bounds)
+  }
+
+  const handleMarkerClick = (id, lat, lng, name, number, address, capacity) => {
+    mapRef?.panTo({ lat, lng })
+    setInfoWindowData({ id, name, number, address, capacity })
+    setIsOpen(true)
+  }
 
   const handleSearchChange = (event) => setSearch(event.target.value)
 
@@ -42,7 +63,6 @@ const StationList = (params) => {
     const filteredStations = params.stations.filter((obj) =>
       JSON.stringify(obj).toLowerCase().includes(search.toLowerCase())
     )
-    console.log('searched')
     setSearchedStations(filteredStations)
     setCurrentPage(0)
   }
@@ -51,6 +71,7 @@ const StationList = (params) => {
     setSearchedStations('')
     setSearch('')
   }
+  // console.log(stations)
 
   return (
     <div className="StationList">
@@ -61,9 +82,52 @@ const StationList = (params) => {
         ) : (
           <GoogleMap
             mapContainerClassName="map-container"
-            center={center}
-            zoom={10}
-          />
+            onLoad={onMapLoad}
+            onClick={() => setIsOpen(false)}
+          >
+            {markers.map(
+              ({ lat, lng, name, number, address, capacity }, ind) => (
+                <Marker
+                  key={ind}
+                  position={{ lat, lng }}
+                  onClick={() => {
+                    handleMarkerClick(
+                      ind,
+                      lat,
+                      lng,
+                      name,
+                      number,
+                      address,
+                      capacity
+                    )
+                  }}
+                >
+                  {isOpen && infoWindowData?.id === ind && (
+                    <InfoWindow
+                      onCloseClick={() => {
+                        setIsOpen(false)
+                      }}
+                    >
+                      <div>
+                        <h3>
+                          {infoWindowData.number}&nbsp;-&nbsp;
+                          {infoWindowData.name}
+                        </h3>
+                        <p>
+                          {infoWindowData.address}
+                          <br />
+                          <em>
+                            Capacity:&nbsp;{infoWindowData.capacity}
+                            &nbsp;bikes
+                          </em>
+                        </p>
+                      </div>
+                    </InfoWindow>
+                  )}
+                </Marker>
+              )
+            )}
+          </GoogleMap>
         )}
       </div>
       <div>
