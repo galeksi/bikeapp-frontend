@@ -71,9 +71,9 @@ const StationList = (params) => {
   // console.log(stations)
 
   return (
-    <div className="StationList">
-      <h2>StationList</h2>
-      <div className="App">
+    <div>
+      <h2 class="text-center text-4xl font-bold mb-2">Stations</h2>
+      <div>
         {!isLoaded ? (
           <h1>Loading...</h1>
         ) : (
@@ -127,9 +127,13 @@ const StationList = (params) => {
           </GoogleMap>
         )}
       </div>
-      <div>
+      <div class="flex flex-row bg-zinc-200 p-5 rounded-md shadow my-5">
         <form onSubmit={searchStations}>
-          <input value={search} onChange={handleSearchChange} />
+          <input
+            class="rounded py-2 px-5"
+            value={search}
+            onChange={handleSearchChange}
+          />
           <button type="submit">Search</button>
         </form>
         <button onClick={clearSearch}>Clear search</button>
@@ -151,8 +155,8 @@ const StationList = (params) => {
         previousClassName={'item previous'}
         previousLabel={'< back'}
       />
-      <table>
-        <tbody>
+      <table class="w-full p-8">
+        <thead>
           <tr>
             <th>Number</th>
             <th>Name</th>
@@ -160,6 +164,8 @@ const StationList = (params) => {
             <th>City</th>
             <th>Capacity</th>
           </tr>
+        </thead>
+        <tbody>
           {stationsToView.items.map((s) => (
             <tr key={s.id}>
               <td>{s.number}</td>

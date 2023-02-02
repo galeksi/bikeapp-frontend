@@ -21,26 +21,26 @@ const App = () => {
 
   if (loading) return <h2>Loading ...</h2>
 
-  const padding = {
-    padding: 5,
-  }
+  // const padding = {
+  //   padding: 5,
+  // }
 
-  const container = {
-    width: '800px',
-    margin: 'auto',
-  }
+  // const container = {
+  //   width: '800px',
+  //   margin: 'auto',
+  // }
 
   return (
-    <div style={container}>
+    <div className="container mx-auto">
       <div>
         <Router>
-          <div>
-            <h1>Bikeapp 2023</h1>
+          <div class="flex flex-row bg-zinc-200 p-5 rounded-b-md shadow mb-5">
+            <h1 class="grow mx-5">Bikeapp 2023</h1>
             <div>
-              <Link style={padding} to="/">
+              <Link class="mx-5" to="/">
                 stations
               </Link>
-              <Link style={padding} to="/trips">
+              <Link class="mx-5" to="/trips">
                 trips
               </Link>
             </div>
@@ -54,10 +54,6 @@ const App = () => {
               element={<Station stations={stations} />}
             />
           </Routes>
-
-          {/* <div>
-            <i>Bikeapp, Aleksi Rendel - 2023</i>
-          </div> */}
         </Router>
       </div>
     </div>
