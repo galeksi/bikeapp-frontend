@@ -127,16 +127,28 @@ const StationList = (params) => {
           </GoogleMap>
         )}
       </div>
-      <div class="flex flex-row bg-zinc-200 p-5 rounded-md shadow my-5">
-        <form onSubmit={searchStations}>
-          <input
-            class="rounded py-2 px-5"
-            value={search}
-            onChange={handleSearchChange}
-          />
-          <button type="submit">Search</button>
-        </form>
-        <button onClick={clearSearch}>Clear search</button>
+      <div class="grid justify-items-center bg-zinc-200 p-5 rounded-t-md shadow mt-5 border-zinc-500">
+        <div class="flex flex-row">
+          <form onSubmit={searchStations}>
+            <input
+              class="rounded py-2 px-5 focus:outline-blue-600"
+              value={search}
+              onChange={handleSearchChange}
+            />
+            <button
+              class="ml-5 px-10 py-2 rounded bg-blue-600 text-white font-black hover:bg-blue-500"
+              type="submit"
+            >
+              Search
+            </button>
+          </form>
+          <button
+            class="ml-5 px-5 py-2 bg-white font-black text-zinc-500 rounded hover:text-zinc-800"
+            onClick={clearSearch}
+          >
+            Clear search
+          </button>
+        </div>
       </div>
       <ReactPaginate
         activeClassName={'item active '}

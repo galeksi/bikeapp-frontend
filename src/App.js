@@ -31,17 +31,22 @@ const App = () => {
   // }
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto text-zink-600 tracking-wider">
       <div>
         <Router>
           <div class="flex flex-row bg-zinc-200 p-5 rounded-b-md shadow mb-5">
-            <h1 class="grow mx-5">Bikeapp 2023</h1>
+            <h1 class="grow mx-5 text-2xl font-black text-blue-600">
+              BIKEAPP 2023
+            </h1>
             <div>
-              <Link class="mx-5" to="/">
-                stations
+              <Link class="mx-5 text-xl font-black hover:text-blue-600" to="/">
+                STATIONS
               </Link>
-              <Link class="mx-5" to="/trips">
-                trips
+              <Link
+                class="mx-5 text-xl font-black hover:text-blue-600"
+                to="/trips"
+              >
+                TRIPS
               </Link>
             </div>
           </div>
@@ -55,6 +60,9 @@ const App = () => {
             />
           </Routes>
         </Router>
+      </div>
+      <div class="bg-zinc-200 p-5 mt-10 rounded-t-md shadow">
+        <p class="font-black text-zinc-500">Bikeapp 2023 - Aleksi Rendel</p>
       </div>
     </div>
   )
