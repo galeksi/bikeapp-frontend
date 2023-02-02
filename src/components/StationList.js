@@ -7,6 +7,7 @@ import {
   InfoWindow,
 } from '@react-google-maps/api'
 import ReactPaginate from 'react-paginate'
+import { paginationLoader } from '../utils/helpers'
 
 import './StationList.css'
 import './pagination.css'
@@ -24,11 +25,7 @@ const StationList = (params) => {
   })
 
   const stations = searchedStations === '' ? params.stations : searchedStations
-  const itemsPerPage = 20
-  const itemOffset = currentPage * itemsPerPage
-  const endOffset = itemOffset + itemsPerPage
-  const stationsToView = stations.slice(itemOffset, endOffset)
-  const pageCount = Math.ceil(stations.length / itemsPerPage)
+  const stationsToView = paginationLoader(stations, currentPage, 20)
 
   const markers = stations.map((s) => ({
     name: s.nimi,
@@ -148,7 +145,7 @@ const StationList = (params) => {
         nextLabel={'forward >'}
         onPageChange={handlePageClick}
         forcePage={currentPage}
-        pageCount={pageCount}
+        pageCount={stationsToView.pageCount}
         pageClassName={'item pagination-page '}
         pageRangeDisplayed={2}
         previousClassName={'item previous'}
@@ -163,18 +160,17 @@ const StationList = (params) => {
             <th>City</th>
             <th>Capacity</th>
           </tr>
-          {stationsToView &&
-            stationsToView.map((s) => (
-              <tr key={s.id}>
-                <td>{s.number}</td>
-                <td>
-                  <Link to={`/station/${s.id}`}>{s.nimi}</Link>
-                </td>
-                <td>{s.osoite}</td>
-                <td>{s.kaupunki}</td>
-                <td>{s.capacity}</td>
-              </tr>
-            ))}
+          {stationsToView.items.map((s) => (
+            <tr key={s.id}>
+              <td>{s.number}</td>
+              <td>
+                <Link to={`/station/${s.id}`}>{s.nimi}</Link>
+              </td>
+              <td>{s.osoite}</td>
+              <td>{s.kaupunki}</td>
+              <td>{s.capacity}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

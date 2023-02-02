@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useLazyQuery } from '@apollo/client'
-import { LATEST_TRIPS, ALL_TRIPS } from '../queries'
+import { LATEST_TRIPS, ALL_TRIPS } from '../utils/queries'
 import ReactPaginate from 'react-paginate'
+import { paginationLoader } from '../utils/helpers'
 import Select from 'react-select'
 import DatePicker from 'react-datepicker'
+
 import 'react-datepicker/dist/react-datepicker.css'
 import './pagination.css'
 
@@ -19,7 +21,6 @@ const Trips = (params) => {
     value: s.id,
     label: s.nimi,
   }))
-  // console.log(stationOptions)
 
   const [fetchTrips, { loadingTrips }] = useLazyQuery(LATEST_TRIPS, {
     onCompleted: (data) => {
@@ -47,11 +48,7 @@ const Trips = (params) => {
   if (loadingTrips || loadingFilterdTrips) return <h2>Loading ...</h2>
 
   const trips = filteredTrips === '' ? allTrips : filteredTrips
-  const itemsPerPage = 20
-  const itemOffset = currentPage * itemsPerPage
-  const endOffset = itemOffset + itemsPerPage
-  const tripsToView = trips.slice(itemOffset, endOffset)
-  const pageCount = Math.ceil(trips.length / itemsPerPage)
+  const tripsToView = paginationLoader(trips, currentPage, 20)
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected)
@@ -75,8 +72,6 @@ const Trips = (params) => {
     setReturnFilter('')
     setStartDate('')
   }
-
-  // console.log(tripsToView);
 
   return (
     <div>
@@ -120,7 +115,7 @@ const Trips = (params) => {
         nextClassName={'item next '}
         nextLabel={'forward >'}
         onPageChange={handlePageClick}
-        pageCount={pageCount}
+        pageCount={tripsToView.pageCount}
         pageClassName={'item pagination-page '}
         pageRangeDisplayed={2}
         previousClassName={'item previous'}
@@ -138,25 +133,26 @@ const Trips = (params) => {
             <th>Duration</th>
             <th>Distance</th>
           </tr>
-          {tripsToView.map((t) => (
-            <tr key={t.id}>
-              <td>{t.departureStation.nimi}</td>
-              <td>{t.departureStation.number}</td>
-              <td>
-                {new Date(Number(t.departure)).toLocaleDateString('fi-FI')}
-              </td>
-              <td>
-                {new Date(Number(t.departure)).toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </td>
-              <td>{t.returnStation.nimi}</td>
-              <td>{t.returnStation.number}</td>
-              <td>{(t.duration / 60).toFixed(0)}&nbsp;min</td>
-              <td>{(t.distance / 1000).toFixed(1)}&nbsp;km</td>
-            </tr>
-          ))}
+          {tripsToView.items &&
+            tripsToView.items.map((t) => (
+              <tr key={t.id}>
+                <td>{t.departureStation.nimi}</td>
+                <td>{t.departureStation.number}</td>
+                <td>
+                  {new Date(Number(t.departure)).toLocaleDateString('fi-FI')}
+                </td>
+                <td>
+                  {new Date(Number(t.departure)).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </td>
+                <td>{t.returnStation.nimi}</td>
+                <td>{t.returnStation.number}</td>
+                <td>{(t.duration / 60).toFixed(0)}&nbsp;min</td>
+                <td>{(t.distance / 1000).toFixed(1)}&nbsp;km</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

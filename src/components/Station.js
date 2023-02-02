@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
-import { STATION_STATS } from '../queries'
+import { STATION_STATS } from '../utils/queries'
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api'
 
 import './Station.css'

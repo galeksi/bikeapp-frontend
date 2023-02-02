@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useLazyQuery } from '@apollo/client'
-import { ALL_STATIONS } from './queries'
+import { ALL_STATIONS } from './utils/queries'
 import Station from './components/Station'
 import StationList from './components/StationList'
 import Trips from './components/Trips'
