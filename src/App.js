@@ -21,29 +21,23 @@ const App = () => {
 
   if (loading) return <h2>Loading ...</h2>
 
-  // const padding = {
-  //   padding: 5,
-  // }
-
-  // const container = {
-  //   width: '800px',
-  //   margin: 'auto',
-  // }
-
   return (
     <div className="container mx-auto text-zink-600 tracking-wider">
       <div>
         <Router>
-          <div class="flex flex-row bg-zinc-200 p-5 rounded-b-md shadow mb-5">
-            <h1 class="grow mx-5 text-2xl font-black text-blue-600">
+          <div className="flex flex-row bg-blue-600 p-5 rounded-b-md mb-5">
+            <h1 className="grow mx-5 text-2xl font-black text-white">
               BIKEAPP 2023
             </h1>
             <div>
-              <Link class="mx-5 text-xl font-black hover:text-blue-600" to="/">
+              <Link
+                className="mx-5 text-xl font-black text-white hover:text-blue-200"
+                to="/"
+              >
                 STATIONS
               </Link>
               <Link
-                class="mx-5 text-xl font-black hover:text-blue-600"
+                className="mx-5 text-xl font-black text-white hover:text-blue-200"
                 to="/trips"
               >
                 TRIPS
@@ -61,8 +55,8 @@ const App = () => {
           </Routes>
         </Router>
       </div>
-      <div class="bg-zinc-200 p-5 mt-10 rounded-t-md shadow">
-        <p class="font-black text-zinc-500">Bikeapp 2023 - Aleksi Rendel</p>
+      <div className="bg-zinc-200 p-5 my-5 rounded-md">
+        <p className="font-black text-zinc-500">Bikeapp 2023 - Aleksi Rendel</p>
       </div>
     </div>
   )

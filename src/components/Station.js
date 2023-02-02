@@ -35,13 +35,10 @@ const Station = (params) => {
   )
 
   return (
-    <div className="Station">
-      <h1>
+    <div>
+      <h1 className="text-center text-4xl font-bold mb-2">
         Station Nr {station.number}: {station.nimi}
       </h1>
-      <h2>
-        {station.osoite}&nbsp;{station.kaupunki}
-      </h2>
       {!isLoaded ? (
         <h1>Loading...</h1>
       ) : (
@@ -53,45 +50,59 @@ const Station = (params) => {
           <Marker position={center} />
         </GoogleMap>
       )}
-      <h3>Statistics</h3>
-      <div>
-        <p>
-          <b>Capacity:</b>&nbsp;{station.capacity}&nbsp;bikes
-        </p>
-        <p>
-          <b>Departures from station:</b>&nbsp;{stats.startTotal}
-        </p>
-        <p>
-          <b>Returns to station:</b>&nbsp;{stats.returnTotal}
-        </p>
-        <p>
-          <b>Average distance for departure trips:</b>&nbsp;{stats.startAvg}
-          &nbsp;km
-        </p>
-        <p>
-          <b>Average distance for return trips:</b>&nbsp;{stats.returnAvg}
-          &nbsp;km
-        </p>
-        <p>
-          <b>Most popular return station from here:</b>
-        </p>
-        <ol>
-          {returnStations.map((s) => (
-            <li key={s.id}>
-              {s.nimi}&nbsp;(Nr.{s.number})&nbsp;-&nbsp;{s.osoite}
-            </li>
-          ))}
-        </ol>
-        <p>
-          <b>Most popular departure station to here:</b>
-        </p>
-        <ol>
-          {departureStations.map((s) => (
-            <li key={s.id}>
-              {s.nimi}&nbsp;(Nr.{s.number})&nbsp;-&nbsp;{s.osoite}
-            </li>
-          ))}
-        </ol>
+      <div className="grid grid-cols-3 gap-4 mt-5">
+        <div className="bg-blue-50 rounded-md p-5">
+          <h2 className="font-black text-blue-600 border-b-2 border-blue-600 mb-5">
+            {station.osoite}&nbsp;{station.kaupunki}
+          </h2>
+          <p>
+            <b>Capacity:</b>&nbsp;{station.capacity}&nbsp;bikes
+          </p>
+          <p>
+            <b>Departures from station:</b>&nbsp;{stats.startTotal}
+          </p>
+          <p>
+            <b>Returns to station:</b>&nbsp;{stats.returnTotal}
+          </p>
+          <p>
+            <b>Average distance for departure:</b>&nbsp;{stats.startAvg}
+            &nbsp;km
+          </p>
+          <p>
+            <b>Average distance for return:</b>&nbsp;{stats.returnAvg}
+            &nbsp;km
+          </p>
+        </div>
+        <div className="bg-blue-50 rounded-md p-5">
+          <h2 className="font-black text-blue-600 border-b-2 border-blue-600 mb-5">
+            Most popular return stations:
+          </h2>
+          <ol>
+            {returnStations.map((s) => (
+              <li key={s.id}>
+                <b>
+                  {s.nimi}&nbsp;(Nr.{s.number})
+                </b>
+                &nbsp;-&nbsp;{s.osoite}
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="bg-blue-50 rounded-md p-5">
+          <h2 className="font-black text-blue-600 border-b-2 border-blue-600 mb-5">
+            Most popular departure stations:
+          </h2>
+          <ol>
+            {departureStations.map((s) => (
+              <li key={s.id}>
+                <b>
+                  {s.nimi}&nbsp;(Nr.{s.number})
+                </b>
+                &nbsp;-&nbsp;{s.osoite}
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </div>
   )

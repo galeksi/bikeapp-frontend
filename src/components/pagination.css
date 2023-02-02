@@ -37,9 +37,8 @@
   list-style-type: none;
   position: relative;
   width: 100%;
-  border-top: 1px solid #71717a;
-  border-bottom-left-radius: 0.375rem;
-  border-bottom-right-radius: 0.375rem;
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
 }
 
 ul {

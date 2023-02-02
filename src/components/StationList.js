@@ -72,7 +72,7 @@ const StationList = (params) => {
 
   return (
     <div>
-      <h2 class="text-center text-4xl font-bold mb-2">Stations</h2>
+      <h2 className="text-center text-4xl font-bold mb-2">STATIONS</h2>
       <div>
         {!isLoaded ? (
           <h1>Loading...</h1>
@@ -127,23 +127,23 @@ const StationList = (params) => {
           </GoogleMap>
         )}
       </div>
-      <div class="grid justify-items-center bg-zinc-200 p-5 rounded-t-md shadow mt-5 border-zinc-500">
-        <div class="flex flex-row">
+      <div className="grid justify-items-center bg-zinc-200 p-5 rounded-md my-5 border-zinc-500">
+        <div className="flex flex-row">
           <form onSubmit={searchStations}>
             <input
-              class="rounded py-2 px-5 focus:outline-blue-600"
+              className="rounded py-2 px-5 focus:outline-blue-600"
               value={search}
               onChange={handleSearchChange}
             />
             <button
-              class="ml-5 px-10 py-2 rounded bg-blue-600 text-white font-black hover:bg-blue-500"
+              className="ml-5 px-10 py-2 rounded bg-blue-600 text-white font-black hover:bg-blue-500"
               type="submit"
             >
               Search
             </button>
           </form>
           <button
-            class="ml-5 px-5 py-2 bg-white font-black text-zinc-500 rounded hover:text-zinc-800"
+            className="ml-5 px-5 py-2 bg-white font-black text-zinc-500 rounded hover:text-zinc-800"
             onClick={clearSearch}
           >
             Clear search
@@ -167,26 +167,33 @@ const StationList = (params) => {
         previousClassName={'item previous'}
         previousLabel={'< back'}
       />
-      <table class="w-full p-8">
-        <thead>
+      <table className="w-full rounded-b-md">
+        <thead className="bg-blue-600 font-black text-white">
           <tr>
-            <th>Number</th>
-            <th>Name</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Capacity</th>
+            <th className="p-2">Number</th>
+            <th className="p-2 text-left">Name</th>
+            <th className="p-2 text-left">Address</th>
+            <th className="p-2">City</th>
+            <th className="p-2">Capacity</th>
+            <th className="p-2">Details</th>
           </tr>
         </thead>
         <tbody>
           {stationsToView.items.map((s) => (
-            <tr key={s.id}>
-              <td>{s.number}</td>
-              <td>
-                <Link to={`/station/${s.id}`}>{s.nimi}</Link>
+            <tr className="even:bg-blue-50" key={s.id}>
+              <td className="p-2 text-center">{s.number}</td>
+              <td className="p-2">{s.nimi}</td>
+              <td className="p-2">{s.osoite}</td>
+              <td className="p-2 text-center">{s.kaupunki}</td>
+              <td className="p-2 text-center">{s.capacity}</td>
+              <td className="p-2 text-center">
+                <Link
+                  className="font-black text-blue-600 hover:text-blue-500"
+                  to={`/station/${s.id}`}
+                >
+                  View
+                </Link>
               </td>
-              <td>{s.osoite}</td>
-              <td>{s.kaupunki}</td>
-              <td>{s.capacity}</td>
             </tr>
           ))}
         </tbody>

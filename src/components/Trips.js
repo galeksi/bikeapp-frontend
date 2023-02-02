@@ -75,35 +75,52 @@ const Trips = (params) => {
 
   return (
     <div>
-      <h2>Trips</h2>
-      <div>
-        <Select
-          className="basic-single"
-          classNamePrefix="Departure..."
-          value={departureFilter}
-          isClearable={true}
-          isSearchable={true}
-          name="Departure station"
-          options={stationOptions}
-          onChange={setDepartureFilter}
-        />
-        <Select
-          className="basic-single"
-          classNamePrefix="Return..."
-          value={returnFilter}
-          isClearable={true}
-          isSearchable={true}
-          name="Return station"
-          options={stationOptions}
-          onChange={setReturnFilter}
-        />
-        <DatePicker
-          placeholderText="Select date..."
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-        />
-        <button onClick={filterTrips}>Filter</button>
-        <button onClick={clearFilter}>Clear filter</button>
+      <h2 className="text-center text-4xl font-bold mb-2">Trips</h2>
+      <div className="bg-zinc-200 p-5 rounded-md my-5 border-zinc-500">
+        <div className="flex items-center grid grid-cols-3 gap-4 mb-5">
+          <Select
+            className="basic-single focus:outline-blue-600"
+            classNamePrefix="Departure..."
+            value={departureFilter}
+            isClearable={true}
+            isSearchable={true}
+            placeholder="Departure station"
+            options={stationOptions}
+            onChange={setDepartureFilter}
+          />
+          <Select
+            className="basic-single focus:outline-blue-600"
+            classNamePrefix="Return..."
+            value={returnFilter}
+            isClearable={true}
+            isSearchable={true}
+            placeholder="Return station"
+            options={stationOptions}
+            onChange={setReturnFilter}
+          />
+          <DatePicker
+            className="p-2 w-full text-zinc-500 rounded focus:outline-blue-600"
+            placeholderText="Date"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+          />
+        </div>
+        <div className="grid justify-end">
+          <div>
+            <button
+              className="ml-5 px-10 py-2 rounded bg-blue-600 text-white font-black hover:bg-blue-500"
+              onClick={filterTrips}
+            >
+              Filter
+            </button>
+            <button
+              className="ml-5 px-5 py-2 bg-white font-black text-zinc-500 rounded hover:text-zinc-800"
+              onClick={clearFilter}
+            >
+              Clear filter
+            </button>
+          </div>
+        </div>
       </div>
       <ReactPaginate
         activeClassName={'item active '}
@@ -121,36 +138,42 @@ const Trips = (params) => {
         previousClassName={'item previous'}
         previousLabel={'< back'}
       />
-      <table>
-        <tbody>
+      <table className="w-full">
+        <thead className="bg-blue-600 font-black text-white">
           <tr>
-            <th>Departure station</th>
-            <th>Station Nr</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Return Station</th>
-            <th>Station Nr</th>
-            <th>Duration</th>
-            <th>Distance</th>
+            <th className="p-2 pl-5 text-left">Departure station</th>
+            <th className="p-2">Station Nr</th>
+            <th className="p-2">Date</th>
+            <th className="p-2">Time</th>
+            <th className="p-2 pl-5 text-left">Return Station</th>
+            <th className="p-2">Station Nr</th>
+            <th className="p-2">Duration</th>
+            <th className="p-2">Distance</th>
           </tr>
+        </thead>
+        <tbody>
           {tripsToView.items &&
             tripsToView.items.map((t) => (
-              <tr key={t.id}>
-                <td>{t.departureStation.nimi}</td>
-                <td>{t.departureStation.number}</td>
-                <td>
+              <tr className="even:bg-blue-50" key={t.id}>
+                <td className="p-2 pl-5">{t.departureStation.nimi}</td>
+                <td className="p-2 text-center">{t.departureStation.number}</td>
+                <td className="p-2 text-center">
                   {new Date(Number(t.departure)).toLocaleDateString('fi-FI')}
                 </td>
-                <td>
+                <td className="p-2 text-center">
                   {new Date(Number(t.departure)).toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
                 </td>
-                <td>{t.returnStation.nimi}</td>
-                <td>{t.returnStation.number}</td>
-                <td>{(t.duration / 60).toFixed(0)}&nbsp;min</td>
-                <td>{(t.distance / 1000).toFixed(1)}&nbsp;km</td>
+                <td className="p-2 pl-5">{t.returnStation.nimi}</td>
+                <td className="p-2 text-center">{t.returnStation.number}</td>
+                <td className="p-2 text-center">
+                  {(t.duration / 60).toFixed(0)}&nbsp;min
+                </td>
+                <td className="p-2 text-center">
+                  {(t.distance / 1000).toFixed(1)}&nbsp;km
+                </td>
               </tr>
             ))}
         </tbody>
