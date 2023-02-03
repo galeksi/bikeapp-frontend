@@ -7,7 +7,7 @@ import Select from 'react-select'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
-import './pagination.css'
+import '../styles/pagination.css'
 
 const Trips = (params) => {
   const [allTrips, setTrips] = useState([])
@@ -17,17 +17,20 @@ const Trips = (params) => {
   const [returnFilter, setReturnFilter] = useState('')
   const [startDate, setStartDate] = useState('')
 
+  // Sets options for dropdown select to filter departure and return stations
   const stationOptions = params.stations.map((s) => ({
     value: s.id,
     label: s.nimi,
   }))
 
+  // Lazy query to trigger fetching all trips ordered my latest
   const [fetchTrips, { loadingTrips }] = useLazyQuery(LATEST_TRIPS, {
     onCompleted: (data) => {
       setTrips(data.latestTrips)
     },
   })
 
+  // Lazy query to fetch all trips with filter variables
   const [fetchFilteredTrips, { loadingFilterdTrips }] = useLazyQuery(
     ALL_TRIPS,
     {
@@ -37,6 +40,7 @@ const Trips = (params) => {
     }
   )
 
+  // Initial query of trips limited to 100 to reduce browser load
   useEffect(() => {
     fetchTrips({
       variables: {
@@ -47,13 +51,16 @@ const Trips = (params) => {
 
   if (loadingTrips || loadingFilterdTrips) return <h2>Loading ...</h2>
 
+  // Decides if all trips or filter result is added for pagination and initial view
   const trips = filteredTrips === '' ? allTrips : filteredTrips
   const tripsToView = paginationLoader(trips, currentPage, 20)
 
+  // Changes pagination page
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected)
   }
 
+  // Triggers filtered query with variables and limits to 100 to reduce browser load
   const filterTrips = () => {
     fetchFilteredTrips({
       variables: {
@@ -66,6 +73,7 @@ const Trips = (params) => {
     setCurrentPage(0)
   }
 
+  // Clears filter and sets State for rerender
   const clearFilter = () => {
     setFilteredTrips('')
     setDepartureFilter('')

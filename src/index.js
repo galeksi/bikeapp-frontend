@@ -1,7 +1,9 @@
 import ReactDOM from 'react-dom/client'
 import App from './App'
+// Importing Tailwind css
 import './index.css'
 
+// Importing and settung up Apollo client for GraphQL
 import {
   ApolloClient,
   ApolloProvider,

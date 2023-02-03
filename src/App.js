@@ -8,7 +8,7 @@ import Trips from './components/Trips'
 
 const App = () => {
   const [stations, setStations] = useState([])
-
+  // Fetching all Stations from DB to serve all routes
   const [fetchStations, { loading }] = useLazyQuery(ALL_STATIONS, {
     onCompleted: (data) => {
       setStations(data.allStations)

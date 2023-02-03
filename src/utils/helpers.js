@@ -1,3 +1,4 @@
+// Pagination loader is used for stations and trips page
 export const paginationLoader = (data, currentPage, itemsPerPage) => {
   const itemOffset = currentPage * itemsPerPage
   const endOffset = itemOffset + itemsPerPage

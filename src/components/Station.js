@@ -3,16 +3,18 @@ import { useQuery } from '@apollo/client'
 import { STATION_STATS } from '../utils/queries'
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api'
 
-import './Station.css'
+import '../styles/map.css'
 
 const Station = (params) => {
   const id = useParams().id
   const stations = params.stations
 
+  // Loads google API key
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
   })
 
+  // Queries single station data and statistics
   const stationData = useQuery(STATION_STATS, {
     variables: {
       id: id,
@@ -27,6 +29,7 @@ const Station = (params) => {
   const stats = stationData.data.stationStats
   const center = { lat: Number(station.lat), lng: Number(station.long) }
 
+  // Statistics query only returns stations by Id; other station details are added from params
   const returnStations = stats.popularReturn.map((ret) =>
     stations.find((station) => station.id === ret)
   )

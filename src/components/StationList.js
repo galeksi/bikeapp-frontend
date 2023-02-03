@@ -9,8 +9,8 @@ import {
 import ReactPaginate from 'react-paginate'
 import { paginationLoader } from '../utils/helpers'
 
-import './StationList.css'
-import './pagination.css'
+import '../styles/map.css'
+import '../styles/pagination.css'
 
 const StationList = (params) => {
   const [currentPage, setCurrentPage] = useState(0)
@@ -20,13 +20,16 @@ const StationList = (params) => {
   const [isOpen, setIsOpen] = useState(false)
   const [infoWindowData, setInfoWindowData] = useState()
 
+  // Loads google API key
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
   })
 
+  // Decides if all stations or search result is added for pagination and initial view
   const stations = searchedStations === '' ? params.stations : searchedStations
   const stationsToView = paginationLoader(stations, currentPage, 20)
 
+  // Google maps markers location and info
   const markers = stations.map((s) => ({
     name: s.nimi,
     number: s.number,
@@ -36,6 +39,7 @@ const StationList = (params) => {
     lng: Number(s.long),
   }))
 
+  // Sets google map boundary and centers map accordingly
   const onMapLoad = (map) => {
     setMapRef(map)
     const bounds = new window.google.maps.LatLngBounds()
@@ -43,18 +47,22 @@ const StationList = (params) => {
     map.fitBounds(bounds)
   }
 
+  // Handels click to show markers on map
   const handleMarkerClick = (id, lat, lng, name, number, address, capacity) => {
     mapRef?.panTo({ lat, lng })
     setInfoWindowData({ id, name, number, address, capacity })
     setIsOpen(true)
   }
 
-  const handleSearchChange = (event) => setSearch(event.target.value)
-
+  // Changes pagination page
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected)
   }
 
+  // Controlled form changes state for searchterm
+  const handleSearchChange = (event) => setSearch(event.target.value)
+
+  // Searches stations from params and sets state for rerender
   const searchStations = (event) => {
     event.preventDefault()
     const filteredStations = params.stations.filter((obj) =>
@@ -64,11 +72,11 @@ const StationList = (params) => {
     setCurrentPage(0)
   }
 
+  // Clears search and sets state for rerender of all stations
   const clearSearch = () => {
     setSearchedStations('')
     setSearch('')
   }
-  // console.log(stations)
 
   return (
     <div>

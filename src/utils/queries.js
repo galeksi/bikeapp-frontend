@@ -1,3 +1,4 @@
+// All GraphQL Queries
 import { gql } from '@apollo/client'
 
 export const ALL_STATIONS = gql`
