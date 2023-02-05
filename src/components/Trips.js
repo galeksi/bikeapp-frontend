@@ -87,6 +87,7 @@ const Trips = (params) => {
       <div className="bg-zinc-200 p-5 rounded-md my-5 border-zinc-500">
         <div className="flex items-center grid grid-cols-3 gap-4 mb-5">
           <Select
+            id="departurestation"
             className="basic-single focus:outline-blue-600"
             classNamePrefix="Departure..."
             value={departureFilter}
@@ -97,6 +98,7 @@ const Trips = (params) => {
             onChange={setDepartureFilter}
           />
           <Select
+            id="returnstation"
             className="basic-single focus:outline-blue-600"
             classNamePrefix="Return..."
             value={returnFilter}
@@ -107,6 +109,7 @@ const Trips = (params) => {
             onChange={setReturnFilter}
           />
           <DatePicker
+            id="datepicker"
             className="p-2 w-full text-zinc-500 rounded focus:outline-blue-600"
             placeholderText="Date"
             selected={startDate}
@@ -116,6 +119,7 @@ const Trips = (params) => {
         <div className="grid justify-end">
           <div>
             <button
+              id="tripfilterbutton"
               className="ml-5 px-10 py-2 rounded bg-blue-600 text-white font-black hover:bg-blue-500"
               onClick={filterTrips}
             >

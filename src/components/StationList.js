@@ -80,7 +80,7 @@ const StationList = (params) => {
 
   return (
     <div>
-      <h2 className="text-center text-4xl font-bold mb-2">STATIONS</h2>
+      <h2 className="text-center text-4xl font-bold mb-2">Stations</h2>
       <div>
         {!isLoaded ? (
           <h1>Loading...</h1>
@@ -139,11 +139,13 @@ const StationList = (params) => {
         <div className="flex flex-row">
           <form onSubmit={searchStations}>
             <input
+              id="stationsearch"
               className="rounded py-2 px-5 focus:outline-blue-600"
               value={search}
               onChange={handleSearchChange}
             />
             <button
+              id="stationsearchbutton"
               className="ml-5 px-10 py-2 rounded bg-blue-600 text-white font-black hover:bg-blue-500"
               type="submit"
             >
